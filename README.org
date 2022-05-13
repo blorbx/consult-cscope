@@ -29,7 +29,7 @@ can perform:
   Search for any assignments to this symbol. (only in cscope 15.8+)
 
 Since =consult-cscope=
-uses[[https://github.com/minad/consult#asynchronous-search][consult's
+uses [[https://github.com/minad/consult#asynchronous-search][consult's
 asynchronous search]] interface, results can be narrowed using various splitting
 styles.
 
