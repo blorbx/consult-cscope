@@ -101,5 +101,34 @@ Add =consult-cscope.el= to your =load-path= and use =require= or
 (package! consult-cscope :recipe (:host github :repo "blorbx/consult-cscope"))
 #+end_src
 
+Further customization can be added to =~/.doom.d/config.el=. An example configuration:
+
+#+begin_src elisp
+(use-package! consult-cscope
+  :defer t
+  :commands (consult-cscope-symbol
+             consult-cscope-definition
+             consult-cscope-called-by
+             consult-cscope-calling
+             consult-cscope-text
+             consult-cscope-egrep
+             consult-cscope-file
+             consult-cscope-including
+             consult-cscope-assignment))
+
+(map! :localleader
+      :map (c-mode-map c++-mode-map)
+      (:prefix ("g" . "goto")
+       :desc "Find this symbol" "r" #'consult-cscope-symbol
+       :desc "Find this global definition" "d" #'consult-cscope-definition
+       :desc "Find functions called by this function" "c" #'consult-cscope-called-by
+       :desc "Find functions calling this function" "C" #'consult-cscope-calling
+       :desc "Find this text string" "x" #'consult-cscope-text
+       :desc "Find this egrep pattern" "e" #'consult-cscope-egrep
+       :desc "Find this file" "f" #'consult-cscope-file
+       :desc "Find this files including this file" "F" #'consult-cscope-including
+       :desc "Find assignments to this symbol" "R" #'consult-cscope-assignment))
+#+end_src
+
 ** MELPA
 This package has not yet been added to MELPA.
