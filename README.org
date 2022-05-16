@@ -9,23 +9,23 @@ This package provides [[http://cscope.sourceforge.net/][cscope]] support for the
 following interactive functions corresponding to each of the search types cscope
 can perform:
 
-- =consult-cscope-find-this-symbol=
+- =consult-cscope-symbol=
   Search for all references to this symbol.
-- =consult-cscope-find-this-global-definition=
+- =consult-cscope-definition=
   Search for the global definition of this symbol.
-- =consult-cscope-find-called-by-this-function=
+- =consult-cscope-called-by=
   Search for all functions called by this function.
-- =consult-cscope-find-calling-this-function=
+- =consult-cscope-calling=
   Search for all functions calling this function.
-- =consult-cscope-find-this-text-string=
+- =consult-cscope-text=
   Search for this text string.
-- =consult-cscope-find-this-egrep-pattern=
+- =consult-cscope-egrep=
   Search for this egrep pattern.
-- =consult-cscope-find-this-file=
+- =consult-cscope-file=
   Search for this file.
-- =consult-cscope-find-files-including-this-file=
+- =consult-cscope-including=
   Search for any files including this file.
-- =consult-cscope-find-assignments-to-this-symbol=
+- =consult-cscope-assignment=
   Search for any assignments to this symbol. (only in cscope 15.8+)
 
 Since =consult-cscope=

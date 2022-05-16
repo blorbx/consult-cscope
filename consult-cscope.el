@@ -31,15 +31,15 @@
 ;; results. `consult-cscope' provides the following functions which correspond
 ;; to each of the search types cscope can perform:
 ;;
-;;   consult-cscope-find-this-symbol
-;;   consult-cscope-find-this-global-definition
-;;   consult-cscope-find-called-by-this-function
-;;   consult-cscope-find-calling-this-function
-;;   consult-cscope-find-this-text-string
-;;   consult-cscope-find-this-egrep-pattern
-;;   consult-cscope-find-this-file
-;;   consult-cscope-find-files-including-this-file
-;;   consult-cscope-find-assignments-to-this-symbol
+;;   consult-cscope-symbol
+;;   consult-cscope-definition
+;;   consult-cscope-called-by
+;;   consult-cscope-calling
+;;   consult-cscope-text
+;;   consult-cscope-egrep
+;;   consult-cscope-file
+;;   consult-cscope-including
+;;   consult-cscope-assignment
 ;;
 ;; These functions add the thing-at-point to `consult's "future history" which
 ;; can be accessed with a bind to the `next-history-element' function.
@@ -252,7 +252,7 @@ symbol used by `thing-at-point' for initial input."
                   consult-cscope-database-file))))
 
 ;;;###autoload
-(defun consult-cscope-find-this-symbol (arg)
+(defun consult-cscope-symbol (arg)
   "Use cscope to find this symbol.
 
 The symbol at point as initial input if prefix ARG provided.  The symbol at
@@ -262,7 +262,7 @@ point is also added to consult's future history."
                           default-directory arg 'symbol))
 
 ;;;###autoload
-(defun consult-cscope-find-this-global-definition (arg)
+(defun consult-cscope-definition (arg)
   "Use cscope to find this global definition.
 
 The symbol at point as initial input if prefix ARG provided.  The symbol at
@@ -272,7 +272,7 @@ point is also added to consult's future history."
                           default-directory arg 'symbol))
 
 ;;;###autoload
-(defun consult-cscope-find-called-by-this-function (arg)
+(defun consult-cscope-called-by (arg)
   "Use cscope to find functions called by this function.
 
 The symbol at point as initial input if prefix ARG provided.  The symbol at
@@ -282,7 +282,7 @@ point is also added to consult's future history."
                           default-directory arg 'symbol))
 
 ;;;###autoload
-(defun consult-cscope-find-calling-this-function (arg)
+(defun consult-cscope-calling (arg)
   "Use cscope to find functions calling this function.
 
 The symbol at point as initial input if prefix ARG provided.  The symbol at
@@ -292,7 +292,7 @@ point is also added to consult's future history."
                           default-directory arg 'symbol))
 
 ;;;###autoload
-(defun consult-cscope-find-this-text-string (arg)
+(defun consult-cscope-text (arg)
   "Use cscope to find this text string.
 
 The symbol at point as initial input if prefix ARG provided.  The symbol at
@@ -302,7 +302,7 @@ point is also added to consult's future history."
                           default-directory arg 'word))
 
 ;;;###autoload
-(defun consult-cscope-find-this-egrep-pattern (arg)
+(defun consult-cscope-egrep (arg)
   "Use cscope to find this egrep pattern.
 
 The symbol at point as initial input if prefix ARG provided.  The symbol at
@@ -312,7 +312,7 @@ point is also added to consult's future history."
                           default-directory arg 'word))
 
 ;;;###autoload
-(defun consult-cscope-find-this-file (arg)
+(defun consult-cscope-file (arg)
   "Use cscope to find this file.
 
 The symbol at point as initial input if prefix ARG provided.  The symbol at
@@ -322,7 +322,7 @@ point is also added to consult's future history."
                           default-directory arg 'filename))
 
 ;;;###autoload
-(defun consult-cscope-find-files-including-this-file (arg)
+(defun consult-cscope-including (arg)
   "Use cscope to find files including this file.
 
 The symbol at point as initial input if prefix ARG provided.  The symbol at
@@ -332,7 +332,7 @@ point is also added to consult's future history."
                           default-directory arg 'filename))
 
 ;;;###autoload
-(defun consult-cscope-find-assignments-to-this-symbol (arg)
+(defun consult-cscope-assignment (arg)
   "Use cscope to find assignments to this symbol.
 
 The symbol at point as initial input if prefix ARG provided.  The symbol at
