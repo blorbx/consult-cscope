@@ -152,7 +152,7 @@ FIND-FILE is the file open function, defaulting to `find-file'."
            (col 0) ; cscope eats indentation so can't determine
            (file (substring-no-properties cand 0 file-end))
            (line (string-to-number (substring-no-properties cand (+ 1 file-end) line-end))))
-      (consult--position-marker
+      (consult--marker-from-line-column
        (funcall (or find-file #'find-file) file)
        line col))))
 
@@ -170,11 +170,10 @@ CSCOPE should be a list with the form (program args db-file)."
                                       (or (member "-C" cmd)
                                           (member "-C" opts)))))
     (when re
-      (list :command
-            (append cmd
+      (cons (append cmd
                     re
                     opts)
-            :highlight hl))))
+            hl))))
 
 (defun consult--cscope (prompt builder dir initialp thing)
   "Run cscope with database in DIR directory.
@@ -184,8 +183,8 @@ BUILDER is the command builder.
 DIR is the directory of the cscope database file.
 INITIALP is true if using initial input.
 THING is the type of symbol used by `thing-at-point' for initial input."
-  (let* ((prompt-dir (consult--directory-prompt prompt dir))
-         (default-directory (cdr prompt-dir))
+  (pcase-let* ((`(,prompt ,paths ,dir) (consult--directory-prompt prompt dir))
+         (default-directory dir)
          (read-process-output-max (max read-process-output-max (* 1024 1024)))
          (thingatpt (consult--async-split-thingatpt thing))
          (initial (if (and initialp thingatpt) thingatpt
@@ -194,7 +193,7 @@ THING is the type of symbol used by `thing-at-point' for initial input."
      (consult--async-command builder
        (consult--cscope-format builder)
        :file-handler t) ;; allow tramp
-     :prompt (car prompt-dir)
+     :prompt prompt
      :lookup #'consult--lookup-member
      :state (consult--cscope-state)
      :initial initial
