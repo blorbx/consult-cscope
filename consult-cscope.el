@@ -4,7 +4,7 @@
 
 ;; Author: Michael Chen <blorbx@gmail.com>
 ;; Created: May 13, 2022
-;; Version: 0.1.1
+;; Version: 0.1.2
 ;; Keywords: tools
 ;; Homepage: https://github.com/blorbx/consult-cscope
 ;; Package-Requires: ((emacs "27.1") (consult "0.17"))
