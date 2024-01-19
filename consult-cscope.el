@@ -52,6 +52,9 @@
 
 ;;; Code:
 
+(eval-when-compile
+  (require 'cl-lib)
+  (require 'subr-x))
 (require 'consult)
 
 (defgroup consult-cscope nil
@@ -102,7 +105,7 @@ BUILDER is the command argument builder."
     (lambda (action)
       (cond
        ((stringp action)
-        (setq highlight (plist-get (funcall builder action) :highlight))
+        (setq highlight (cdr (funcall builder action)))
         (funcall async action))
        ((consp action)
         (let (result)
@@ -156,24 +159,26 @@ FIND-FILE is the file open function, defaulting to `find-file'."
        (funcall (or find-file #'find-file) file)
        line col))))
 
-(defun consult--cscope-builder (input numpattern cscope)
-  "Build command line given INPUT.
-NUMPATTERN and CSCOPE are used to build the cscope command.
-CSCOPE should be a list with the form (program args db-file)."
-  (pcase-let* ((`(,program ,args ,db-file) cscope)
-               (cmd (split-string-and-unquote
-                     (format "%s %s -f %s -L%s"
-                             program args db-file numpattern)))
-               (type 'basic)
-               (`(,arg . ,opts) (consult--command-split input))
-               (`(,re . ,hl) (funcall consult--regexp-compiler arg type
-                                      (or (member "-C" cmd)
-                                          (member "-C" opts)))))
-    (when re
-      (cons (append cmd
-                    re
-                    opts)
-            hl))))
+(defun consult--cscope-make-builder (numpattern program args db-file)
+  "Return a builder which builds a command line given INPUT.
+NUMPATTERN defines the cscope search type.
+PROGRAM is the path to the cscope executable.
+ARGS are any extra arguments for cscope.
+DB-FILE is the path to the cscope database file."
+  (lambda (input)
+    (pcase-let* ((cmd (split-string-and-unquote
+                       (format "%s %s -f %s -L%s"
+                               program args db-file numpattern)))
+                 (type 'basic)
+                 (`(,arg . ,opts) (consult--command-split input))
+                 (`(,re . ,hl) (funcall consult--regexp-compiler arg type
+                                        (or (member "-C" cmd)
+                                            (member "-C" opts)))))
+      (when re
+        (cons (append cmd
+                      re
+                      opts)
+              hl)))))
 
 (defun consult--cscope (prompt builder dir initialp thing)
   "Run cscope with database in DIR directory.
@@ -242,9 +247,8 @@ symbol used by `thing-at-point' for initial input."
          (program consult-cscope-program) ; Use buffer-local vars
          (args consult-cscope-args)
          (initialp (xor initialp consult-cscope-use-initial))
-         (builder (lambda (input)
-                    (consult--cscope-builder
-                     input numpattern `(,program ,args ,db-file)))))
+         (builder (funcall #'consult--cscope-make-builder
+                           numpattern program args db-file)))
     (if db-file
         (consult--cscope prompt builder db-dir initialp thing)
       (user-error "Cscope database file `%s' not found"
